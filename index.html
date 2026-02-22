@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Streaming</title>
+
+<!-- TEMPEL SCRIPT POPUNDER DI SINI -->
+<!-- <script src="ISI_SCRIPT_MONETAG_DISINI"></script> -->
+
+<style>
+*{
+  margin:0;
+  padding:0;
+  box-sizing:border-box;
+  font-family:Arial, sans-serif;
+}
+
+body{
+  background:#0f0f0f;
+  color:white;
+}
+
+header{
+  background:#202020;
+  padding:15px 20px;
+  font-size:20px;
+  font-weight:bold;
+  position:sticky;
+  top:0;
+  z-index:100;
+}
+
+.container{
+  padding:20px;
+  display:grid;
+  grid-template-columns:repeat(auto-fill,minmax(320px,1fr));
+  gap:20px;
+}
+
+.card{
+  cursor:pointer;
+}
+
+.thumbnail{
+  width:100%;
+  aspect-ratio:16/9;
+  background:#111;
+  border-radius:12px;
+  overflow:hidden;
+}
+
+.thumbnail img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  transition:0.3s;
+}
+
+.card:hover img{
+  transform:scale(1.05);
+}
+
+.info{
+  display:flex;
+  margin-top:10px;
+}
+
+.avatar{
+  width:36px;
+  height:36px;
+  border-radius:50%;
+  background:#444;
+  margin-right:10px;
+}
+
+.title{
+  font-size:14px;
+  font-weight:bold;
+  margin-bottom:4px;
+}
+
+.meta{
+  font-size:12px;
+  color:#aaa;
+}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  top:0;
+  left:0;
+  width:100%;
+  height:100%;
+  background:#000;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.video-container{
+  width:100%;
+  max-width:900px;
+}
+
+video{
+  width:100%;
+  height:auto;
+}
+
+.close{
+  position:absolute;
+  top:20px;
+  right:25px;
+  font-size:30px;
+  cursor:pointer;
+  color:white;
+}
+</style>
+</head>
+<body>
+
+<header>🎬 My Streaming</header>
+
+<div class="container" id="videoList"></div>
+
+<div class="modal" id="videoModal">
+  <div class="close" onclick="closeVideo()">✕</div>
+  <div class="video-container">
+    <video id="player" controls autoplay>
+      <source id="videoSource">
+    </video>
+  </div>
+</div>
+
+<script>
+
+fetch('videos.json')
+.then(res => res.json())
+.then(data => {
+
+  const container = document.getElementById('videoList');
+
+  data.forEach(video => {
+
+    const card = document.createElement('div');
+    card.className = 'card';
+
+    card.innerHTML = `
+      <div class="thumbnail">
+        <img 
+          src="${video.thumbnail}" 
+          loading="lazy"
+          referrerpolicy="no-referrer"
+          onerror="this.src='https://via.placeholder.com/640x360?text=Thumbnail';"
+        >
+      </div>
+      <div class="info">
+        <div class="avatar"></div>
+        <div>
+          <div class="title">${video.title}</div>
+          <div class="meta">${video.channel} • ${video.views}</div>
+        </div>
+      </div>
+    `;
+
+    card.onclick = () => openVideo(video.video);
+
+    container.appendChild(card);
+
+  });
+
+})
+.catch(error => {
+  console.error("JSON gagal dibaca:", error);
+});
+
+function openVideo(src){
+  document.getElementById("videoSource").src = src;
+  document.getElementById("player").load();
+  document.getElementById("videoModal").style.display="flex";
+}
+
+function closeVideo(){
+  document.getElementById("videoModal").style.display="none";
+  document.getElementById("player").pause();
+}
+
+</script>
+
+</body>
+</html>
