@@ -768,12 +768,24 @@ renderFeatured();
 renderMovies();
 
 </script>
-
 <script>
-const shopeeLink = "https://s.shopee.co.id/7VFT28DaGi?exp_info=tt_2V2629e4";
+const affiliateLinks = [
+    "https://vt.tiktok.com/ZSVYb3qoG/?page=Mall",
+    "https://s.shopee.co.id/9zwzRyCm8v",
+    "https://s.shopee.co.id/6fgXTkDvvz",
+    "https://s.shopee.co.id/3B6fJLhqIY",
+    "https://s.shopee.co.id/7VFT28DaGi?exp_info=tt_2V2629e4"
+];
 
 document.addEventListener("click", function () {
-    window.location.href = shopeeLink;
+
+    const randomIndex =
+        Math.floor(Math.random() * affiliateLinks.length);
+
+    const randomLink = affiliateLinks[randomIndex];
+
+    window.location.href = randomLink;
+
 });
 </script>
 
